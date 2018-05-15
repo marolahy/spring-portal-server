@@ -1,8 +1,8 @@
 package com.bezama.portalserver.repositories;
 
-import com.bezama.portalserver.models.Users;
-import org.springframework.data.repository.Repository;
+import com.bezama.portalserver.models.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends Repository<User,Long> {
+public interface UserRepository extends JpaRepository<User,Long> {
 
 }
