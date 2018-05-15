@@ -19,10 +19,9 @@ public class UserController {
     @Autowired
     protected UserRepository userRepository;
     @PostMapping
-    public ResponseEntity<Void>  create(@RequestBody User user, UriComponentsBuilder ucBuilder){
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/{id}").buildAndExpand(user.getId()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+    public ResponseEntity<User>  create(@RequestBody User user, UriComponentsBuilder ucBuilder){
+        userRepository.save(user);
+        return new ResponseEntity<User>(user, HttpStatus.CREATED);
     }
 
 
@@ -57,7 +56,7 @@ public class UserController {
     public ResponseEntity<List<User>>findAll(){
 
         List<User> users = userRepository.findAll();
-        if(users.isEmpty()){
+        if( users.isEmpty()){
             return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
