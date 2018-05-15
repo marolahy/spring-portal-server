@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.bezama.portalserver.models.User;
 import java.util.List;
@@ -16,8 +17,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping({"/user"})
 public class UserController {
 
+
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+
     @Autowired
     protected UserRepository userRepository;
+
+    public UserController(UserRepository applicationUserRepository,
+                          BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepository = applicationUserRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
     @PostMapping
     public ResponseEntity<User>  create(@RequestBody User user, UriComponentsBuilder ucBuilder){
         userRepository.save(user);
@@ -60,6 +72,10 @@ public class UserController {
             return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
-
+    }
+    @PostMapping("/sign-up")
+    public void signUp(@RequestBody User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 }
