@@ -13,7 +13,7 @@ import java.util.Optional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping({"/api"})
+@RequestMapping({"/user"})
 public class UserController {
 
     @Autowired
